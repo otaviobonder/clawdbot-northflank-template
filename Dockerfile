@@ -76,6 +76,11 @@ COPY --from=openclaw-build /openclaw /openclaw
 RUN printf '%s\n' '#!/usr/bin/env bash' 'exec node /openclaw/dist/entry.js "$@"' > /usr/local/bin/openclaw \
   && chmod +x /usr/local/bin/openclaw
 
+# Install Atlassian CLI (Linux AMD64)
+RUN curl -LO "https://acli.atlassian.com/linux/latest/acli_linux_amd64/acli" \
+    && chmod +x ./acli \
+    && mv ./acli /usr/local/bin/acli
+
 COPY src ./src
 
 # The wrapper listens on $PORT.
@@ -84,6 +89,5 @@ COPY src ./src
 # If we force a different port, deployments can come up but the domain will route elsewhere.
 EXPOSE 8080
 
-# Ensure PID 1 reaps zombies and forwards signals.
-ENTRYPOINT ["tini", "-s", "--"]
-CMD ["node", "src/server.js"]
+COPY scripts/start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh

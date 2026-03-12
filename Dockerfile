@@ -49,6 +49,7 @@ RUN apt-get update \
     tini \
     python3 \
     python3-venv \
+    curl \
   && rm -rf /var/lib/apt/lists/*
 
 # `openclaw update` expects pnpm. Provide it in the runtime image.
@@ -82,6 +83,8 @@ RUN curl -LO "https://acli.atlassian.com/linux/latest/acli_linux_amd64/acli" \
     && mv ./acli /usr/local/bin/acli
 
 COPY src ./src
+COPY scripts/start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
 
 # The wrapper listens on $PORT.
 # IMPORTANT: Do not set a default PORT here.
@@ -89,5 +92,4 @@ COPY src ./src
 # If we force a different port, deployments can come up but the domain will route elsewhere.
 EXPOSE 8080
 
-COPY scripts/start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
+ENTRYPOINT ["/usr/local/bin/start.sh"]

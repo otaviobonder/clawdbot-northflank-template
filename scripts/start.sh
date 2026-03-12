@@ -7,7 +7,6 @@ echo "Authenticating Atlassian CLI non-interactively..."
 # We pipe the token via standard input so the CLI doesn't hang waiting for a user prompt.
 echo "$ATLASSIAN_API_TOKEN" | acli rovodev auth login \
   --email "$ATLASSIAN_EMAIL" \
-  --site "$ATLASSIAN_SITE" \
   --token
 
 # (Optional) Pre-configure Rovo settings for OpenClaw agents

@@ -92,4 +92,5 @@ RUN chmod +x /usr/local/bin/start.sh
 # If we force a different port, deployments can come up but the domain will route elsewhere.
 EXPOSE 8080
 
-ENTRYPOINT ["/usr/local/bin/start.sh"]
+ENTRYPOINT ["tini", "-s", "--"]
+CMD ["/usr/local/bin/start.sh"]
